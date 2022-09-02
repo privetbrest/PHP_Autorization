@@ -25,39 +25,39 @@
                 <div class="row">
                     <div>
                         <div align="center" class="signup-form">
-                    <ul class="nav justify-content-center"> 
-                        <?php if (User::isGuest()): ?>
-                        <li>
-                            <a class="nav-link" href="/user/login/">
-                                <h3>Вход</h3>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="/user/register/">
-                                <h3>
-                                    Регистрация</h3>
-                                </a>
-                            </li>
-                        <?php else: ?>
-                        <li>
-                            <a class="nav-link">
-                                <h3 class="cl1">
-                                    <?php echo "Hello " ?><?php echo ($_SESSION['user']) ?>
-                                </h3>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="/cabinet/">
-                                <h3>Аккаунт</h3>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="/user/logout/">
-                                <h3>Выход</h3>
-                            </a>
-                        </li>
-                        <?php endif; ?>
-                    </ul>
+                            <ul class="nav justify-content-center"> 
+                                <?php if (User::isGuest()): ?>
+                                <li>
+                                    <a class="nav-link" href="/user/login/">
+                                        <h3>Вход</h3>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/user/register/">
+                                        <h3>
+                                            Регистрация</h3>
+                                        </a>
+                                    </li>
+                                <?php else: ?>
+                                <li>
+                                    <a class="nav-link">
+                                        <h3 class="cl1">
+                                            <?php echo "Hello " ?><?php echo ($_SESSION['user']) ?>
+                                        </h3>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/cabinet/">
+                                        <h3>Аккаунт</h3>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/user/logout/">
+                                        <h3>Выход</h3>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
+                            </ul>
                         </div>
                         </div>
                 </div>
