@@ -5,6 +5,7 @@
  */
 class UserController
 {
+    
     /**
      * Action для страницы "Регистрация"
      */
@@ -161,6 +162,7 @@ class UserController
      */
     public function actionLogin()
     {
+        
         //Переменные для ошибок в форму
         $userError = "";
         $log6 = "";
@@ -211,8 +213,10 @@ class UserController
                                                 
                                             }
 
+        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {                                
         // Обработка формы
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['login'])) {
+            
             // Если форма отправлена 
             // Получаем данные из формы
             $login = $_POST['login'];
@@ -244,11 +248,14 @@ class UserController
 
 
             }
+            // }
         }
+       
 
         // Подключаем вид
         require_once(ROOT . '/views/user/login.php');
         return true;
+        
     }
 
     /**

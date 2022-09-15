@@ -83,6 +83,7 @@ class CabinetController
                                                 }
                                                 
                                             }
+        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
 
         // Обработка формы
         if (isset($_POST['submit'])) {
@@ -145,6 +146,7 @@ class CabinetController
                 $_SESSION['emailUser'] = $email;
             }
         }
+        // }
 
 
                 // Подключаем вид
@@ -203,6 +205,8 @@ class CabinetController
                                                 
                                             }
         
+        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {  
+
         // Обработка формы
         if (isset($_POST['submit'])) {
             // Если форма отправлена 
@@ -236,7 +240,7 @@ class CabinetController
                 }    
             }
         }
-
+        // }
 
                 // Подключаем вид
                 require_once(ROOT . '/views/cabinet/delete.php');

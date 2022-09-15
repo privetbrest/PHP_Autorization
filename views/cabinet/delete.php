@@ -7,9 +7,9 @@
                     <div align="center" class="signup-form">
                         <h3>Удаление аккаунта</h3>
                         <form action="#" method="post">
-                            <a><?php echo $del; ?></a>
+                            <p align="center"><a><?php echo $del; ?></a><p>
                             <a><?php echo $passCorrect; ?></a>
-                            <p><input type="password" name="password" placeholder="Пароль" value="<?php echo $password; ?>"/></p>
+                            <p><input id="password" type="password" name="password" placeholder="Пароль" value="<?php echo $password; ?>"/></p>
                             <p><input type="submit" name="submit" class="btn btn-default" value="Удалить аккаунт" /></p>
                         </form>
                     </div>
