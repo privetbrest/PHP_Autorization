@@ -34,7 +34,27 @@ class CabinetController
         $emailIncorrect = "";
         $emailUse = "";
         $nameLength = "";
+        $nameLengthMin = "";
         $reg = "";
+        $logSpace = "";
+        $nameSpace = "";
+        $passChar = "";
+        $nameLengthMax ="";
+        $edit = "";
+
+        $errorsLog6 = [];
+        $errorsLogSpace = [];
+        $errorsLogUse = [];
+        $errorsPass6 = [];
+        $errorsPassData = [];
+        $errorsPassChar = [];
+        $errorsPassConflict = [];
+        $errorsEmailIncorrect = [];
+        $errorsEmailUse = [];
+        $errorsNameSpace = [];
+        $errorsNameLengthMin = [];
+        $errorsNameLengthMax = [];
+        $successReg = [];
 
         // Переменные для формы
         $login = false;
@@ -83,10 +103,11 @@ class CabinetController
                                                 }
                                                 
                                             }
-        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-
+        if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
         // Обработка формы
-        if (isset($_POST['submit'])) {
+            
+        if (isset($_POST['login'])) {
+
             // Если форма отправлена 
             // Получаем данные из формы
             $login = $_POST['login'];
@@ -97,56 +118,165 @@ class CabinetController
             
             // Флаг ошибок
             $errors = false;
-        
+            
+            header('Content-Type: application/json');
+
             // Валидация полей
             if (!User::checkLogin($login)) {
                 $errors[] = 'Login не должен быть короче 6-ти символов';
                 $log6 = 'Login не должен быть короче 6-ти символов';
+                
+                $errorsLog6 = array (
+                    'textLog6' => 'Login не должен быть короче 6-ти символов',
+                    'errLog6' => 'errorsLog6',
+                );
+                echo json_encode($errorsLog6);
+                
+                exit;
             }
-            if (!($login == $_SESSION['user'])) {
-                if (!User::checkUserLogin($login)) {
-                    $errors[] = 'Такой Login уже используется';
-                    $logUse = 'Такой Login уже используется';
-                }
+
+            if (!User::checkSpaceLogin($login)) {
+                $errors[] = 'Login не должен содержать пробелы';
+                $logSpace = 'Login не должен содержать пробелы';
+                $errorsLogSpace = array (
+                    'textLogSpace' => 'Login не должен содержать пробелы',
+                    'errLogSpace' => 'errorsLogSpace',
+                );
+                echo json_encode($errorsLogSpace);
+                exit;
+            }
+            if (!User::checkUserLogin($login)) {
+                $errors[] = 'Такой Login уже используется';
+                $logUse = 'Такой Login уже используется';
+                $errorsLogUse = array (
+                    'textLogUse' => 'Такой Login уже используется',
+                    'errLogUse' => 'errorsLogUse',
+                );
+                echo json_encode($errorsLogUse);
+                exit;
             }
             if (!User::checkPassword($password)) {
                 $errors[] = 'Пароль не должен быть короче 6-ти символов';
                 $pass6 = 'Пароль не должен быть короче 6-ти символов';
+                $errorsPass6 = array (
+                    'textPass6' => 'Пароль не должен быть короче 6-ти символов',
+                    'errPass6' => 'errorsPass6',
+                );
+                echo json_encode($errorsPass6);
+                exit;
             }
             if (!User::checkDataPassword($password)) {
                 $errors[] = 'Пароль должен содержать буквы и цифры';
                 $passData = 'Пароль должен содержать буквы и цифры';
+                $errorsPassData = array (
+                    'textPassData' => 'Пароль должен содержать буквы и цифры',
+                    'errPassData' => 'errorsPassData',
+                );
+                echo json_encode($errorsPassData);
+                exit;
+            }
+            if (User::checkCharsPassword($password)) {
+                $errors[] = 'Пароль не должен содержать спец символы';
+                $passChar = 'Пароль не должен содержать спец символы';
+                $errorsPassChar = array (
+                    'textPassChar' => 'Пароль не должен содержать спец символы',
+                    'errPassChar' => 'errorsPassChar',
+                );
+                echo json_encode($errorsPassChar);
+                exit;
             }
             if (!User::checkConfirmPassword($password, $confirmPassword)) {
                 $errors[] = 'Пароли не совпадают';
                 $passConflict = 'Пароли не совпадают';
+                $errorsPassConflict = array (
+                    'textPassConflict' => 'Пароли не совпадаюты',
+                    'errPassConflict' => 'errorsPassConflict',
+                );
+                echo json_encode($errorsPassConflict);
+                exit;
             }
             if (!User::checkEmail($email)) {
                 $errors[] = 'Неправильный email';
                 $emailIncorrect = 'Неправильный email';
+                $errorsEmailIncorrect = array (
+                    'textEmailIncorrect' => 'Неправильный email',
+                    'errEmailIncorrect' => 'errorsEmailIncorrect',
+                );
+                echo json_encode($errorsEmailIncorrect);
+                exit;
             }
-            // print($_SESSION['emailUser']);
-            if (!($email == $_SESSION['emailUser'])) {    
-                if (!User::checkUserEmail($email)) {
-                    $errors[] = 'Такой Email уже используется';
-                    $emailUse = 'Такой Email уже используется';
-                }
+            if (!User::checkEmail2($email)) {
+                $errors[] = 'Неправильный email';
+                $emailIncorrect = 'Неправильный email';
+                $errorsEmailIncorrect = array (
+                    'textEmailIncorrect' => 'Неправильный email',
+                    'errEmailIncorrect' => 'errorsEmailIncorrect',
+                );
+                echo json_encode($errorsEmailIncorrect);
+                exit;
+            }
+            if (!User::checkUserEmail($email)) {
+                $errors[] = 'Такой Email уже используется';
+                $emailUse = 'Такой Email уже используется';
+                $errorsEmailUse = array (
+                    'textEmailUse' => 'Такой Email уже используется',
+                    'errEmailUse' => 'errorsEmailUse',
+                );
+                echo json_encode($errorsEmailUse);
+                exit;
+            }
+            if (!User::checkSpaceName($name)) {
+                $errors[] = 'Имя не должно содержать пробелы';
+                $nameSpace = 'Имя не должно содержать пробелы';
+                $errorsNameSpace = array (
+                    'textNameSpace' => 'Имя не должно содержать пробелы',
+                    'errNameSpace' => 'errorsNameSpace',
+                );
+                echo json_encode($errorsNameSpace);
+                exit;
             }
             if (!User::checkName($name)) {
                 $errors[] = 'Имя не должно быть короче 2-х символов';
-                $nameLength = 'Имя не должно быть короче 2-х символов';
+                $nameLengthMin = 'Имя не должно быть короче 2-х символов';
+                $errorsNameLengthMin = array (
+                    'textNameLengthMin' => 'Имя не должно быть короче 2-х символов',
+                    'errNameLengthMin' => 'errorsNameLengthMin',
+                );
+                echo json_encode($errorsNameLengthMin);
+                exit;
+            }
+            
+            if (!User::checkNameMax($name)) {
+                $errors[] = 'Имя не должно быть длинее 25-х символов';
+                $nameLengthMax = 'Имя не должно быть длинее 25-х символов';
+                $errorsNameLengthMax = array (
+                    'textNameLengthMax' => 'Имя не должно быть длинее 25-х символов',
+                    'errNameLengthMax' => 'errorsNameLengthMax',
+                );
+                echo json_encode($errorsNameLengthMax);
+                exit;
             }
             
             if ($errors == false) {
                 // Если ошибок нет
                 // Обновляем данные пользователя пользователя
                 $result = User::changeUserData($login, $password, $confirmPassword,$email, $name);
-                $reg = "Пользовательские данные обновлены!";
+                $edit = "Пользовательские данные обновлены!";
+                $successEdit = array (
+                    'textEdit' => 'Пользовательские данные обновлены!',
+                    'errEdit' => 'successEdit',
+                );
+                echo json_encode($successEdit);
                 $_SESSION['user'] = $login;
                 $_SESSION['emailUser'] = $email;
+                exit;
+
+
+                
+                // header("Location: /cabinet/edit");
             }
         }
-        // }
+        }
 
 
                 // Подключаем вид
@@ -157,7 +287,7 @@ class CabinetController
     public function actionDelete()
     {
         //Переменные для ошибок в форму
-        $passCorrect = "";
+        $passCorrect = [];
         $del = "";
         $UserDel = "";
 
@@ -165,7 +295,7 @@ class CabinetController
         $password = false;
 
         $result = false;
-
+        
 // Защита от POST инъекций
                                             $jsxss="onabort,oncanplay,oncanplaythrough,ondurationchange,onemptied,onended,onerror,onloadeddata,onloadedmetadata,onloadstart,onpause,onplay,onplaying,onprogress,onratechange,onseeked,onseeking,onstalled,onsuspend,ontimeupdate,onvolumechange,onwaiting,oncopy,oncut,onpaste,ondrag,ondragend,ondragenter,ondragleave,ondragover,ondragstart,ondrop,onblur,onfocus,onfocusin,onfocusout,onchange,oninput,oninvalid,onreset,onsearch,onselect,onsubmit,onabort,onbeforeunload,onerror,onhashchange,onload,onpageshow,onpagehide,onresize,onscroll,onunload,onkeydown,onkeypress,onkeyup,altKey,ctrlKey,shiftKey,metaKey,key,keyCode,which,charCode,location,onclick,ondblclick,oncontextmenu,onmouseover,onmouseenter,onmouseout,onmouseleave,onmouseup,onmousemove,onwheel,altKey,ctrlKey,shiftKey,metaKey,button,buttons,which,clientX,clientY,detail,relatedTarget,screenX,screenY,deltaX,deltaY,deltaZ,deltaMode,animationstart,animationend,animationiteration,animationName,elapsedTime,propertyName,elapsedTime,transitionend,onerror,onmessage,onopen,ononline,onoffline,onstorage,onshow,ontoggle,onpopstate,ontouchstart,ontouchmove,ontouchend,ontouchcancel,persisted,javascript";
                                             $jsxss = explode(",",$jsxss);
@@ -205,10 +335,11 @@ class CabinetController
                                                 
                                             }
         
-        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {  
+        if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {  
 
         // Обработка формы
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['password'])) {
+            header('Content-Type: application/json');
             // Если форма отправлена 
             // Получаем данные из формы
             $password = $_POST['password'];
@@ -216,31 +347,36 @@ class CabinetController
             // Флаг ошибок
             $errors = false;
             
+            // Проверяем зарегистрирован ли пользователь
             $userId = User::checkUserData($login, $password);
 
             if ($userId == false) {
                 // Если данные неправильные - показываем ошибку
                 $errors[] = 'Неверный пароль';
-                $passCorrect = 'Неверный пароль';
+                $errorsPassCorrect = array (
+                    'textPassCorrect' => 'Неверный пароль',
+                    'errPassCorrect' => 'errorsPassCorrect',
+                );
+                echo json_encode($errorsPassCorrect);
+                exit;
             } else {
                 
                 $userDel = User::deleteUserData($login, $password);
-                // session_unset();
-                // // unset ($_SESSION['user']);
-                // // $success = "Аккаунт удален";
-                // header("Location: /user/logout");
+                
                 if ($userDel == false) {
                     // Если данные неправильные - показываем ошибку
                     $del = "NO";
+                    $passCorrect = 'Неверный пароль';
+                    echo "errorsPassCorrect";
                 } else {
                     session_unset();
-                // // unset ($_SESSION['user']);
-                $success = "Аккаунт удален";
-                header("Location: /user/logout");
+         
+                    $success = "Аккаунт удален";
+                    header("Location: /user/logout");
                 }    
             }
         }
-        // }
+        }
 
                 // Подключаем вид
                 require_once(ROOT . '/views/cabinet/delete.php');

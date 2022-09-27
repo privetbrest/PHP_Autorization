@@ -4,16 +4,16 @@
         <div class="container">
             <div class="row">
                 <div>
-                    <p align="center"><?php echo $userError; ?></p>
+                    <p align="center"><a id="logPass"></a></p>
                     <div align="center" class="signup-form">
                         <h3>Вход на сайт</h3>
-                        <form action="#" method="post">
-                            <a><?php echo $log6; ?></a>
-                            <p><input id="login" type="login" name="login" placeholder="Login" value="<?php echo $login; ?>"/><p>
+                        <noscript><p>Ваш браузер не поддерживает скрипты!</p></noscript>
+                        <form method="post">
+                            <p><a id="log6"></a></p>
+                            <p><input id="login" type="text" name="login" placeholder="Login" value="<?php echo $login; ?>"/><p>
                             <p><input id="password" type="password" name="password" placeholder="Пароль" value="<?php echo $password; ?>"/></p>
-                            <input id="submit" type="submit" name="submit" class="btn1" value="Вход" />
+                            <button class="btn btn-primary" type="button" id="submitLog" name="submit">Вход</button>
                         </form>
-                        <p id="hello">.</p>
                     </div>
                 </div>
             </div>
@@ -21,6 +21,6 @@
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="/template/js/main.js"></script>
+    <script src="/template/js/main.js?1273455236"></script>
 </body>
 </html>

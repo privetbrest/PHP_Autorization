@@ -19,12 +19,27 @@ class UserController
         $passConflict = "";
         $emailIncorrect = "";
         $emailUse = "";
-        $nameLength = "";
+        $nameLengthMin = "";
         $reg = "";
         $logSpace = "";
         $nameSpace = "";
         $passChar = "";
         $nameLengthMax ="";
+
+        $errorsLog6 = [];
+        $errorsLogSpace = [];
+        $errorsLogUse = [];
+        $errorsPass6 = [];
+        $errorsPassData = [];
+        $errorsPassChar = [];
+        $errorsPassConflict = [];
+        $errorsEmailIncorrect = [];
+        $errorsEmailUse = [];
+        $errorsNameSpace = [];
+        $errorsNameLengthMin = [];
+        $errorsNameLengthMax = [];
+        $successReg = [];
+
 
         // Переменные для формы
         $login = false;
@@ -73,10 +88,11 @@ class UserController
                                                 }
                                                 
                                             }
-// Обработка формы
-        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-            
-        if (isset($_POST['submit'])) {
+        if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+
+        // Обработка формы  
+        if (isset($_POST['login'])) {
+
             // Если форма отправлена 
             // Получаем данные из формы
             $login = $_POST['login'];
@@ -87,59 +103,143 @@ class UserController
             
             // Флаг ошибок
             $errors = false;
-           
+
+            header('Content-Type: application/json');
+
             // Валидация полей
             if (!User::checkLogin($login)) {
                 $errors[] = 'Login не должен быть короче 6-ти символов';
                 $log6 = 'Login не должен быть короче 6-ти символов';
+                
+                $errorsLog6 = array (
+                    'textLog6' => 'Login не должен быть короче 6-ти символов',
+                    'errLog6' => 'errorsLog6',
+                );
+                echo json_encode($errorsLog6);
+                
+                exit;
             }
+
             if (!User::checkSpaceLogin($login)) {
                 $errors[] = 'Login не должен содержать пробелы';
                 $logSpace = 'Login не должен содержать пробелы';
+                $errorsLogSpace = array (
+                    'textLogSpace' => 'Login не должен содержать пробелы',
+                    'errLogSpace' => 'errorsLogSpace',
+                );
+                echo json_encode($errorsLogSpace);
+                exit;
             }
             if (!User::checkUserLogin($login)) {
                 $errors[] = 'Такой Login уже используется';
                 $logUse = 'Такой Login уже используется';
+                $errorsLogUse = array (
+                    'textLogUse' => 'Такой Login уже используется',
+                    'errLogUse' => 'errorsLogUse',
+                );
+                echo json_encode($errorsLogUse);
+                exit;
             }
             if (!User::checkPassword($password)) {
                 $errors[] = 'Пароль не должен быть короче 6-ти символов';
                 $pass6 = 'Пароль не должен быть короче 6-ти символов';
+                $errorsPass6 = array (
+                    'textPass6' => 'Пароль не должен быть короче 6-ти символов',
+                    'errPass6' => 'errorsPass6',
+                );
+                echo json_encode($errorsPass6);
+                exit;
             }
             if (!User::checkDataPassword($password)) {
                 $errors[] = 'Пароль должен содержать буквы и цифры';
                 $passData = 'Пароль должен содержать буквы и цифры';
+                $errorsPassData = array (
+                    'textPassData' => 'Пароль должен содержать буквы и цифры',
+                    'errPassData' => 'errorsPassData',
+                );
+                echo json_encode($errorsPassData);
+                exit;
             }
             if (User::checkCharsPassword($password)) {
                 $errors[] = 'Пароль не должен содержать спец символы';
                 $passChar = 'Пароль не должен содержать спец символы';
+                $errorsPassChar = array (
+                    'textPassChar' => 'Пароль не должен содержать спец символы',
+                    'errPassChar' => 'errorsPassChar',
+                );
+                echo json_encode($errorsPassChar);
+                exit;
             }
             if (!User::checkConfirmPassword($password, $confirmPassword)) {
                 $errors[] = 'Пароли не совпадают';
                 $passConflict = 'Пароли не совпадают';
+                $errorsPassConflict = array (
+                    'textPassConflict' => 'Пароли не совпадаюты',
+                    'errPassConflict' => 'errorsPassConflict',
+                );
+                echo json_encode($errorsPassConflict);
+                exit;
             }
             if (!User::checkEmail($email)) {
                 $errors[] = 'Неправильный email';
                 $emailIncorrect = 'Неправильный email';
+                $errorsEmailIncorrect = array (
+                    'textEmailIncorrect' => 'Неправильный email',
+                    'errEmailIncorrect' => 'errorsEmailIncorrect',
+                );
+                echo json_encode($errorsEmailIncorrect);
+                exit;
             }
             if (!User::checkEmail2($email)) {
                 $errors[] = 'Неправильный email';
                 $emailIncorrect = 'Неправильный email';
+                $errorsEmailIncorrect = array (
+                    'textEmailIncorrect' => 'Неправильный email',
+                    'errEmailIncorrect' => 'errorsEmailIncorrect',
+                );
+                echo json_encode($errorsEmailIncorrect);
+                exit;
             }
             if (!User::checkUserEmail($email)) {
                 $errors[] = 'Такой Email уже используется';
                 $emailUse = 'Такой Email уже используется';
+                $errorsEmailUse = array (
+                    'textEmailUse' => 'Такой Email уже используется',
+                    'errEmailUse' => 'errorsEmailUse',
+                );
+                echo json_encode($errorsEmailUse);
+                exit;
             }
             if (!User::checkSpaceName($name)) {
-                $errors[] = 'Login не должен содержать пробелы';
-                $nameSpace = 'Login не должен содержать пробелы';
+                $errors[] = 'Имя не должно содержать пробелы';
+                $nameSpace = 'Имя не должно содержать пробелы';
+                $errorsNameSpace = array (
+                    'textNameSpace' => 'Имя не должно содержать пробелы',
+                    'errNameSpace' => 'errorsNameSpace',
+                );
+                echo json_encode($errorsNameSpace);
+                exit;
             }
             if (!User::checkName($name)) {
                 $errors[] = 'Имя не должно быть короче 2-х символов';
-                $nameLength = 'Имя не должно быть короче 2-х символов';
+                $nameLengthMin = 'Имя не должно быть короче 2-х символов';
+                $errorsNameLengthMin = array (
+                    'textNameLengthMin' => 'Имя не должно быть короче 2-х символов',
+                    'errNameLengthMin' => 'errorsNameLengthMin',
+                );
+                echo json_encode($errorsNameLengthMin);
+                exit;
             }
+            
             if (!User::checkNameMax($name)) {
                 $errors[] = 'Имя не должно быть длинее 25-х символов';
                 $nameLengthMax = 'Имя не должно быть длинее 25-х символов';
+                $errorsNameLengthMax = array (
+                    'textNameLengthMax' => 'Имя не должно быть длинее 25-х символов',
+                    'errNameLengthMax' => 'errorsNameLengthMax',
+                );
+                echo json_encode($errorsNameLengthMax);
+                exit;
             }
             
             
@@ -148,9 +248,17 @@ class UserController
                 // Регистрируем пользователя
                 $result = User::register($login, $password, $confirmPassword,$email, $name);
                 $reg = "Вы зарегистированы!";
+                $successReg = array (
+                    'textReg' => 'Вы зарегистированы!',
+                    'errReg' => 'successReg',
+                );
+                echo json_encode($successReg);
+                exit;
             }
+                
+            
         }
-        // }
+        }
 
         // Подключаем вид
         require_once(ROOT . '/views/user/register.php');
@@ -169,6 +277,9 @@ class UserController
         $pass6 = "";
         $success = "";
         $user = "";
+
+        $errorsLog6 =[];
+        $errorsLogPass = [];
 
         // Переменные для формы
         $login = false;
@@ -213,7 +324,8 @@ class UserController
                                                 
                                             }
 
-        // if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {                                
+        if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+
         // Обработка формы
         if (isset($_POST['login'])) {
             
@@ -225,12 +337,21 @@ class UserController
             // Флаг ошибок
             $errors = false;
 
+            header('Content-Type: application/json');
+
             // Валидация полей
             if (!User::checkLogin($login)) {
                 $errors[] = 'Login не должен быть короче 6-ти символов';
                 $log6 = 'Login не должен быть короче 6-ти символов';
+                
+                $errorsLog6 = array (
+                    'textLog6' => 'Login не должен быть короче 6-ти символов',
+                    'errLog6' => 'errorsLog6',
+                );
+                echo json_encode($errorsLog6);
+                exit;
             }
-           
+            
             // Проверяем зарегистрирован ли пользователь
             $userId = User::checkUserData($login, $password);
 
@@ -238,19 +359,32 @@ class UserController
                 // Если данные неправильные - показываем ошибку
                 $errors[] = 'Неправильные данные для входа на сайт';
                 $userError = 'Неправильные данные для входа на сайт';
+                
+                $errorsLogPass = array (
+                    'textLogPass' => 'Неправильные данные для входа на сайт',
+                    'errLogPass' => 'errorsLogPass',
+                );
+                echo json_encode($errorsLogPass);
+                exit;
+
+                // header("Location: user/login");
             } else {
                 $_SESSION['user'] = $login;
- 
+                $success2 = array (
+                    'text' => 'Входим',
+                    'succ' => '$seccess2',
+                );
+                echo json_encode($success2);
+                exit;
                 $success = "Hello ";
                 // // Перенаправляем пользователя в закрытую часть - кабинет
-                header("Location: /cabinet");
-              
-
+                // header("Location: /cabinet");
+            
 
             }
-            // }
+            
         }
-       
+        }
 
         // Подключаем вид
         require_once(ROOT . '/views/user/login.php');
